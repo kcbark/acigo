@@ -56,6 +56,27 @@ func (c *Client) TenantAdd(name, descr, namealias string) error {
 	return parseJSONError(body)
 }
 
+// TenantUpdate creates a new tenant.
+func (c *Client) TenantUpdate(name, descr, namealias string) error {
+
+	api := "/api/mo/uni.json"
+
+	jsonTenant := jsonTenantUpdate(name, descr, namealias)
+
+	url := c.getURL(api)
+
+	c.debugf("tenant add: url=%s json=%s", url, jsonTenant)
+
+	body, errPost := c.post(url, contentTypeJSON, bytes.NewBufferString(jsonTenant))
+	if errPost != nil {
+		return errPost
+	}
+
+	c.debugf("tenant add: reply: %s", string(body))
+
+	return parseJSONError(body)
+}
+
 // TenantDel deletes an existing tenant.
 func (c *Client) TenantDel(name string) error {
 
