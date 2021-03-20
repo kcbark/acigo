@@ -18,7 +18,7 @@ func dnVrf(tenant, vrf string) string {
 }
 
 // VrfAdd creates a new VRF in a tenant.
-func (c *Client) VrfAdd(tenant, vrf, descr, pcEnfPref, ipdl string) error {
+func (c *Client) VrfAdd(tenant, vrf, descr, namealias string) error {
 
 	me := "VrfAdd"
 
@@ -28,7 +28,7 @@ func (c *Client) VrfAdd(tenant, vrf, descr, pcEnfPref, ipdl string) error {
 
 	api := "/api/node/mo/uni/" + dn + ".json"
 
-	j := fmt.Sprintf(`{"fvCtx":{"attributes":{"dn":"uni/%s","name":"%s","descr":"%s","pcEnfPref":"%s","ipDataPlaneLearning":"%s","rn":"%s","status":"created"}}}`, dn, vrf, descr, pcEnfPref, ipdl, rn)
+	j := fmt.Sprintf(`{"fvCtx":{"attributes":{"dn":"uni/%s","name":"%s","descr":"%s","nameAlias":"%s","rn":"%s","status":"created"}}}`, dn, vrf, descr, namealias, rn)
 
 	url := c.getURL(api)
 
