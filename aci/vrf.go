@@ -28,7 +28,7 @@ func (c *Client) VrfAdd(tenant, vrf, descr, bdenforced, ipdl string) error {
 
 	api := "/api/node/mo/uni/" + dn + ".json"
 
-	j := fmt.Sprintf(`{"fvCtx":{"attributes":{"dn":"uni/%s","name":"%s","descr":"%s","bdEnforcedEnable":"%s","ipDataPlaneLearning":"%s","rn":"%s","status":"created"}}}`, dn, vrf, descr, bdenforced, ipdl, rn)
+	j := fmt.Sprintf(`{"fvCtx":{"attributes":{"dn":"uni/%s","name":"%s","descr":"%s","pcEnfPref":"%s","ipDataPlaneLearning":"%s","rn":"%s","status":"created"}}}`, dn, vrf, descr, bdenforced, ipdl, rn)
 
 	url := c.getURL(api)
 
