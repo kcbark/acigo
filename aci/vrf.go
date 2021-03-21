@@ -44,6 +44,33 @@ func (c *Client) VrfAdd(tenant, vrf, descr, namealias string) error {
 	return parseJSONError(body)
 }
 
+// VrfUpdate updates a VRF in a tenant.
+func (c *Client) VrfUpdate(tenant, vrf, descr, namealias string) error {
+
+	me := "VrfUpdate"
+
+	rn := rnVrf(vrf)
+
+	dn := dnVrf(tenant, vrf)
+
+	api := "/api/node/mo/uni/" + dn + ".json"
+
+	j := fmt.Sprintf(`{"fvCtx":{"attributes":{"dn":"uni/%s","name":"%s","descr":"%s","nameAlias":"%s","rn":"%s"}}}`, dn, vrf, descr, namealias, rn)
+
+	url := c.getURL(api)
+
+	c.debugf("%s: url=%s json=%s", me, url, j)
+
+	body, errPost := c.post(url, contentTypeJSON, bytes.NewBufferString(j))
+	if errPost != nil {
+		return fmt.Errorf("%s: %v", me, errPost)
+	}
+
+	c.debugf("%s: reply: %s", me, string(body))
+
+	return parseJSONError(body)
+}
+
 // VrfDel deletes an existing VRF from a tenant.
 func (c *Client) VrfDel(tenant, vrf string) error {
 
