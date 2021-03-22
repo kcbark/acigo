@@ -23,7 +23,7 @@ func dnSubnet(tenant, bd, subnet string) string {
 }
 
 // BridgeDomainAdd creates a new bridge domain in a tenant.
-func (c *Client) BridgeDomainAdd(tenant, bd, descr string) error {
+func (c *Client) BridgeDomainAdd(tenant, bd, descr, namealias string) error {
 
 	me := "BridgeDomainAdd"
 
@@ -35,8 +35,8 @@ func (c *Client) BridgeDomainAdd(tenant, bd, descr string) error {
 
 	url := c.getURL(api)
 
-	j := fmt.Sprintf(`{"fvBD":{"attributes":{"dn":"uni/%s","name":"%s","descr":"%s","rn":"%s","status":"created"}}}`,
-		dn, bd, descr, rn)
+	j := fmt.Sprintf(`{"fvBD":{"attributes":{"dn":"uni/%s","name":"%s","descr":"%s","nameAlias":"%s","rn":"%s","status":"created"}}}`,
+		dn, bd, descr, namealias, rn)
 
 	c.debugf("%s: url=%s json=%s", me, url, j)
 
