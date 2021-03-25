@@ -78,6 +78,34 @@ func (c *Client) BridgeDomainDel(tenant, bd string) error {
 	return parseJSONError(body)
 }
 
+// BridgeDomainUpdate update existing bridge domain in a tenant.
+func (c *Client) BridgeDomainUpdate(tenant, bd, descr, namealias string) error {
+
+	me := "BridgeDomainUpdate"
+
+	rn := rnBridgeDomain(bd)
+
+	dn := dnBridgeDomain(tenant, bd)
+
+	api := "/api/node/mo/uni/" + dn + ".json"
+
+	url := c.getURL(api)
+
+	j := fmt.Sprintf(`{"fvBD":{"attributes":{"dn":"uni/%s","name":"%s","descr":"%s","nameAlias":"%s","rn":"%s"}}}`,
+		dn, bd, descr, namealias, rn)
+
+	c.debugf("%s: url=%s json=%s", me, url, j)
+
+	body, errPost := c.post(url, contentTypeJSON, bytes.NewBufferString(j))
+	if errPost != nil {
+		return fmt.Errorf("%s: %v", me, errPost)
+	}
+
+	c.debugf("%s: reply: %s", me, string(body))
+
+	return parseJSONError(body)
+}
+
 // BridgeDomainList retrieves the list of bridge domains from a tenant.
 func (c *Client) BridgeDomainList(tenant string) ([]map[string]interface{}, error) {
 
