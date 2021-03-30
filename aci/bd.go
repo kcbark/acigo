@@ -339,7 +339,7 @@ func (c *Client) BridgeDomainSubnetScopeSet(tenant, bd, subnet, scope string) er
 }
 
 // BridgeDomainSubnetVirtualSet set virtual ip for a bridge domain subnet.
-func (c *Client) BridgeDomainSubnetVirtualSet(tenant, bd, subnet, enable bool) error {
+func (c *Client) BridgeDomainSubnetVirtualSet(tenant, bd, subnet string, enabled bool) error {
 
 	me := "BridgeDomainSubnetVirtualSet"
 
