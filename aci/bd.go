@@ -364,6 +364,32 @@ func (c *Client) BridgeDomainSubnetVirtualSet(tenant, bd, subnet string, enabled
 	return parseJSONError(body)
 }
 
+// BridgeDomainSubnetPrimarySet ip to primary / preferred for a bridge domain subnet.
+func (c *Client) BridgeDomainSubnetPrimarySet(tenant, bd, subnet string, enabled bool) error {
+
+	me := "BridgeDomainSubnetVirtualSet"
+
+	dnSN := dnSubnet(tenant, bd, subnet)
+
+	api := "/api/node/mo/uni/" + dnSN + ".json"
+
+	url := c.getURL(api)
+
+	j := fmt.Sprintf(`{"fvSubnet":{"attributes":{"dn":"uni/%s","preferred":"%s"}}}`,
+		dnSN, strconv.FormatBool(enabled))
+
+	c.debugf("%s: url=%s json=%s", me, url, j)
+
+	body, errPost := c.post(url, contentTypeJSON, bytes.NewBufferString(j))
+	if errPost != nil {
+		return fmt.Errorf("%s: %v", me, errPost)
+	}
+
+	c.debugf("%s: reply: %s", me, string(body))
+
+	return parseJSONError(body)
+}
+
 // BridgeDomainSubnetScopeGet retrieves the scope from a bridge domain subnet.
 func (c *Client) BridgeDomainSubnetScopeGet(tenant, bd, subnet string) (string, error) {
 
