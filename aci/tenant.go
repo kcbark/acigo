@@ -9,7 +9,7 @@ import (
 
 func jsonTenantAdd(name, descr, namealias string) string {
 
-	prefix := fmt.Sprintf(`{"fvTenant":{"attributes":{"name":"%s","nameAlias":"%s","annotation":"orchestrator:cendot","status":"created"`, name, namealias)
+	prefix := fmt.Sprintf(`{"fvTenant":{"attributes":{"name":"%s","nameAlias":"%s","annotation":"cendot:cendot","status":"created"`, name, namealias)
 	suffix := "}}}"
 	var middle string
 	if descr != "" {
