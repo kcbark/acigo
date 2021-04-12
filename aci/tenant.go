@@ -7,9 +7,9 @@ import (
 	"time"
 )
 
-func jsonTenantAdd(name, descr, namealias string) string {
+func jsonTenantAdd(name, descr, namealias, annotation string) string {
 
-	prefix := fmt.Sprintf(`{"fvTenant":{"attributes":{"name":"%s","nameAlias":"%s","annotation":"cendot:cendot","status":"created"`, name, namealias)
+	prefix := fmt.Sprintf(`{"fvTenant":{"attributes":{"name":"%s","nameAlias":"%s","annotation":"%s","status":"created"`, name, namealias, annotation)
 	suffix := "}}}"
 	var middle string
 	if descr != "" {
@@ -36,11 +36,11 @@ func jsonTenantDel(name string) string {
 }
 
 // TenantAdd creates a new tenant.
-func (c *Client) TenantAdd(name, descr, namealias string) error {
+func (c *Client) TenantAdd(name, descr, namealias, annotation string) error {
 
 	api := "/api/mo/uni.json"
 
-	jsonTenant := jsonTenantAdd(name, descr, namealias)
+	jsonTenant := jsonTenantAdd(name, descr, namealias, annotation)
 
 	url := c.getURL(api)
 
