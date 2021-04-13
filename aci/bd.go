@@ -79,7 +79,7 @@ func (c *Client) BridgeDomainDel(tenant, bd string) error {
 }
 
 // BridgeDomainUpdate update existing bridge domain in a tenant.
-func (c *Client) BridgeDomainUpdate(tenant, bd, descr, namealias string) error {
+func (c *Client) BridgeDomainUpdate(tenant, bd string, descr, namealias *string) error {
 
 	me := "BridgeDomainUpdate"
 
@@ -91,8 +91,22 @@ func (c *Client) BridgeDomainUpdate(tenant, bd, descr, namealias string) error {
 
 	url := c.getURL(api)
 
-	j := fmt.Sprintf(`{"fvBD":{"attributes":{"dn":"uni/%s","name":"%s","descr":"%s","nameAlias":"%s","rn":"%s"}}}`,
-		dn, bd, descr, namealias, rn)
+	prefix := fmt.Sprintf(`{"fvBD":{"attributes":{"dn":"uni/%s","name":"%s","rn":"%s"`, dn, bd, rn)
+
+	var middle string
+
+	if descr != nil {
+		middle += fmt.Sprintf(`,"descr":"%s"`, *descr)
+	}
+
+	if namealias != nil {
+		middle += fmt.Sprintf(`,"nameAlias":"%s"`, *namealias)
+
+	}
+
+	suffix := `}}}`
+
+	j := fmt.Sprintf("%s%s%s", prefix, middle, suffix)
 
 	c.debugf("%s: url=%s json=%s", me, url, j)
 
