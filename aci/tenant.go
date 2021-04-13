@@ -21,11 +21,18 @@ func jsonTenantAdd(name, descr, namealias, annotation string) string {
 
 func jsonTenantUpdate(name, descr, namealias string) string {
 
-	prefix := fmt.Sprintf(`{"fvTenant":{"attributes":{"name":"%s","nameAlias":"%s"`, name, namealias)
+	prefix := fmt.Sprintf(`{"fvTenant":{"attributes":{"name":"%s"`, name)
 	suffix := "}}}"
+
 	var middle string
+
+	if namealias != "" {
+		middle = fmt.Sprintf(`,"nameAlias":"%s"`, namealias)
+
+	}
+
 	if descr != "" {
-		middle = fmt.Sprintf(`,"descr":"%s"`, descr)
+		middle += fmt.Sprintf(`,"descr":"%s"`, descr)
 	}
 
 	return prefix + middle + suffix
