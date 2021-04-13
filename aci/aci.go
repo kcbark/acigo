@@ -291,6 +291,7 @@ func (c *Client) newHTTPClient() {
 		TLSHandshakeTimeout:   10 * time.Second,
 		ResponseHeaderTimeout: 10 * time.Second,
 		ExpectContinueTimeout: 1 * time.Second,
+		Proxy:                 http.ProxyFromEnvironment,
 	}
 	c.cli = &http.Client{
 		Transport: tr,
