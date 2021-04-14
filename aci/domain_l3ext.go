@@ -83,3 +83,47 @@ func (c *Client) ExternalRoutedDomainList() ([]map[string]interface{}, error) {
 
 	return jsonImdataAttributes(c, body, key, me)
 }
+
+// ExternalRoutedDomainVlanPoolGet retrieves the VLAN pool for the l3 domain.
+func (c *Client) ExternalRoutedDomainVlanPoolGet(name string) (string, error) {
+
+	key := "infraRsVlanNs"
+
+	rn := rnL3Dom(name)
+
+	api := "/api/node/mo/uni/" + rn + ".json?query-target=children&target-subtree-class=" + key
+
+	url := c.getURL(api)
+
+	c.debugf("ExternalRoutedDomainVlanPoolGet: url=%s", url)
+
+	body, errGet := c.get(url)
+	if errGet != nil {
+		return "", errGet
+	}
+
+	c.debugf("ExternalRoutedDomainVlanPoolGet: reply: %s", string(body))
+
+	attrs, errAttr := jsonImdataAttributes(c, body, key, "ExternalRoutedDomainVlanPoolGet")
+	if errAttr != nil {
+		return "", errAttr
+	}
+
+	if len(attrs) < 1 {
+		return "", fmt.Errorf("empty list of vlanpool")
+	}
+
+	attr := attrs[0]
+
+	pool, found := attr["tDn"]
+	if !found {
+		return "", fmt.Errorf("vlanpool not found")
+	}
+
+	poolName, isStr := pool.(string)
+	if !isStr {
+		return "", fmt.Errorf("vlanpool is not a string")
+	}
+
+	return poolName, nil
+}
