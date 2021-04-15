@@ -14,16 +14,41 @@ func apiDomain(rn string) string {
 }
 
 // PhysicalDomainAdd creates a new physical domain.
-func (c *Client) PhysicalDomainAdd(name, vlanpoolName, vlanpoolMode string) error {
+//func (c *Client) PhysicalDomainAdd(name, vlanpoolName, vlanpoolMode string) error {
+//
+//	pool := nameVP(vlanpoolName, vlanpoolMode)
+//
+//	rn := domPhysRN(name)
+//
+//	api := apiDomain(rn)
+//
+//	j := fmt.Sprintf(`{"physDomP":{"attributes":{"dn":"uni/%s","name":"%s","rn":"%s","status":"created"},"children":[{"infraRsVlanNs":{"attributes":{"tDn":"uni/infra/%s","status":"created"}}}]}}`,
+//		rn, name, rn, pool)
+//
+//	url := c.getURL(api)
+//
+//	c.debugf("PhysicalDomainAdd: url=%s json=%s", url, j)
+//
+//	body, errPost := c.post(url, contentTypeJSON, bytes.NewBufferString(j))
+//	if errPost != nil {
+//		return errPost
+//	}
+//
+//
+//	c.debugf("PhysicalDomainAdd: reply: %s", string(body))
+//
+//	return parseJSONError(body)
+//}
 
-	pool := nameVP(vlanpoolName, vlanpoolMode)
+// PhysicalDomainAdd creates a new physical domain.
+func (c *Client) PhysicalDomainAdd(name string) error {
 
 	rn := domPhysRN(name)
 
 	api := apiDomain(rn)
 
-	j := fmt.Sprintf(`{"physDomP":{"attributes":{"dn":"uni/%s","name":"%s","rn":"%s","status":"created"},"children":[{"infraRsVlanNs":{"attributes":{"tDn":"uni/infra/%s","status":"created"}}}]}}`,
-		rn, name, rn, pool)
+	j := fmt.Sprintf(`{"physDomP":{"attributes":{"dn":"uni/%s","name":"%s","rn":"%s","status":"created"}}}`,
+		rn, name, rn)
 
 	url := c.getURL(api)
 
@@ -123,4 +148,30 @@ func (c *Client) PhysicalDomainVlanPoolGet(name string) (string, error) {
 	}
 
 	return poolName, nil
+}
+
+// PhysicalDomainVlanPoolSet sets the VLAN pool for the physical domain.
+func (c *Client) PhysicalDomainVlanPoolSet(domain, vlanpool, vlanpoolMode string) error {
+
+	me := "PhysicalDomainVlanPoolSet"
+
+	rnD := domPhysRN(domain)
+
+	rn := nameVP(vlanpool, vlanpoolMode)
+
+	api := "/api/node/mo/uni/" + rnD + "/rsvlanNs.json"
+
+	url := c.getURL(api)
+	j := fmt.Sprintf(`{"infraRsVlanNs":{"attributes":{"tDn":"uni/infra/%s"},"children":[]}}`, rn)
+
+	c.debugf("%s: url=%s json=%s", me, url, j)
+
+	body, errPost := c.post(url, contentTypeJSON, bytes.NewBufferString(j))
+	if errPost != nil {
+		return fmt.Errorf("%s: %v", me, errPost)
+	}
+
+	c.debugf("%s: reply: %s", me, string(body))
+
+	return parseJSONError(body)
 }

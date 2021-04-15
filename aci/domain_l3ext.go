@@ -127,3 +127,11 @@ func (c *Client) ExternalRoutedDomainVlanPoolGet(name string) (string, error) {
 
 	return poolName, nil
 }
+
+// Set vlanpool on l3domain
+// method: POST
+//url: https://apic.labb01.idcn.se/api/node/mo/uni/l3dom-l3_domain001/rsvlanNs.json
+//payload{"infraRsVlanNs":{"attributes":{"tDn":"uni/infra/vlanns-[vp002]-static"},"children":[]}}
+//response: {"totalCount":"0","imdata":[]}
+//
+//timestamp: 15:43:31 DEBUG
