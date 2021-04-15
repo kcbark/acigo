@@ -10,7 +10,7 @@ func rnL3Dom(dom string) string {
 }
 
 // ExternalRoutedDomainAdd creates a new L3 External Domain.
-func (c *Client) ExternalRoutedDomainAdd(dom string) error {
+func (c *Client) ExternalRoutedDomainAdd(dom, nameAlias string) error {
 
 	me := "ExternalRoutedDomainAdd"
 
@@ -20,8 +20,8 @@ func (c *Client) ExternalRoutedDomainAdd(dom string) error {
 
 	url := c.getURL(api)
 
-	j := fmt.Sprintf(`{"l3extDomP":{"attributes":{"dn":"uni/%s","name":"%s","rn":"%s","status":"created"}}}`,
-		rn, dom, rn)
+	j := fmt.Sprintf(`{"l3extDomP":{"attributes":{"dn":"uni/%s","name":"%s","nameAlias":"%s","rn":"%s","status":"created"}}}`,
+		rn, dom, nameAlias, rn)
 
 	c.debugf("%s: url=%s json=%s", me, url, j)
 
