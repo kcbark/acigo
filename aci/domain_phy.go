@@ -41,18 +41,20 @@ func apiDomain(rn string) string {
 //}
 
 // PhysicalDomainAdd creates a new physical domain.
-func (c *Client) PhysicalDomainAdd(name string) error {
+func (c *Client) PhysicalDomainAdd(name, nameAlias string) error {
+
+	me := "PhysicalDomainAdd"
 
 	rn := domPhysRN(name)
 
 	api := apiDomain(rn)
 
-	j := fmt.Sprintf(`{"physDomP":{"attributes":{"dn":"uni/%s","name":"%s","rn":"%s","status":"created"}}}`,
-		rn, name, rn)
+	j := fmt.Sprintf(`{"physDomP":{"attributes":{"dn":"uni/%s","name":"%s","nameAlias":"%s","rn":"%s","status":"created"}}}`,
+		rn, name, nameAlias, rn)
 
 	url := c.getURL(api)
 
-	c.debugf("PhysicalDomainAdd: url=%s json=%s", url, j)
+	c.debugf("%s: url=%s json=%s", me, url, j)
 
 	body, errPost := c.post(url, contentTypeJSON, bytes.NewBufferString(j))
 	if errPost != nil {
