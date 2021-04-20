@@ -92,12 +92,39 @@ func (c *Client) ApplicationEPGList(tenant, applicationProfile string) ([]map[st
 	return jsonImdataAttributes(c, body, key, me)
 }
 
-// ApplicationEPGBDGet retrieves the application EPG in an application profile.
-func (c *Client) ApplicationEPGBDGet(tenant, applicationProfile, applicationEpg string) ([]map[string]interface{}, error) {
+// ApplicationEPGBDList retrieves the application EPG in an application profile.
+func (c *Client) ApplicationEPGBDList(tenant, applicationProfile, applicationEpg string) ([]map[string]interface{}, error) {
 
 	me := "ApplicationEPGBDGet"
 
 	key := "fvRsBd"
+
+	dnE := rnAEPG(applicationEpg)
+
+	dnP := dnAP(tenant, applicationProfile)
+
+	api := "/api/node/mo/uni/" + dnP + "/" + dnE + ".json?query-target=children&target-subtree-class=" + key
+
+	url := c.getURL(api)
+
+	c.debugf("%s: url=%s", me, url)
+
+	body, errGet := c.get(url)
+	if errGet != nil {
+		return nil, fmt.Errorf("%s: %v", me, errGet)
+	}
+
+	c.debugf("%s: reply: %s", me, string(body))
+
+	return jsonImdataAttributes(c, body, key, me)
+}
+
+// ApplicationEPGDomainList retrieves the domains configured on the EPG
+func (c *Client) ApplicationEPGBDList(tenant, applicationProfile, applicationEpg string) ([]map[string]interface{}, error) {
+
+	me := "ApplicationEPGDomainList"
+
+	key := "fvAEPgLagPolAtt,fvRsVmmVSwitchEnhancedLagPol,fvRsDomAtt"
 
 	dnE := rnAEPG(applicationEpg)
 
