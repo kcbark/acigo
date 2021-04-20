@@ -381,7 +381,7 @@ func (c *Client) BridgeDomainSubnetVirtualSet(tenant, bd, subnet string, enabled
 // BridgeDomainSubnetPrimarySet ip to primary / preferred for a bridge domain subnet.
 func (c *Client) BridgeDomainSubnetPrimarySet(tenant, bd, subnet string, enabled bool) error {
 
-	me := "BridgeDomainSubnetVirtualSet"
+	me := "BridgeDomainSubnetPrimarySet"
 
 	dnSN := dnSubnet(tenant, bd, subnet)
 
