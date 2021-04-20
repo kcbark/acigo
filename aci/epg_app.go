@@ -120,7 +120,7 @@ func (c *Client) ApplicationEPGBDList(tenant, applicationProfile, applicationEpg
 }
 
 // ApplicationEPGDomainList retrieves the domains configured on the EPG
-func (c *Client) ApplicationEPGBDList(tenant, applicationProfile, applicationEpg string) ([]map[string]interface{}, error) {
+func (c *Client) ApplicationEPGDomainList(tenant, applicationProfile, applicationEpg string) ([]map[string]interface{}, error) {
 
 	me := "ApplicationEPGDomainList"
 
