@@ -95,7 +95,7 @@ func (c *Client) ApplicationEPGList(tenant, applicationProfile string) ([]map[st
 // ApplicationEPGBDList retrieves the application EPG in an application profile.
 func (c *Client) ApplicationEPGBDList(tenant, applicationProfile, applicationEpg string) ([]map[string]interface{}, error) {
 
-	me := "ApplicationEPGBDGet"
+	me := "ApplicationEPGBDList"
 
 	key := "fvRsBd"
 
@@ -119,12 +119,12 @@ func (c *Client) ApplicationEPGBDList(tenant, applicationProfile, applicationEpg
 	return jsonImdataAttributes(c, body, key, me)
 }
 
-// ApplicationEPGDomainList retrieves the domains configured on the EPG
+// ApplicationEPGPhysicalDomainList retrieves the physical domains configured on the EPG
 func (c *Client) ApplicationEPGDomainList(tenant, applicationProfile, applicationEpg string) ([]map[string]interface{}, error) {
 
 	me := "ApplicationEPGDomainList"
 
-	key := "fvAEPgLagPolAtt,fvRsVmmVSwitchEnhancedLagPol,fvRsDomAtt"
+	key := "fvRsDomAtt"
 
 	dnE := rnAEPG(applicationEpg)
 
